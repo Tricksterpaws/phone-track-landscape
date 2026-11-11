@@ -77,6 +77,10 @@ A dry run of `python3 landscape/track_phone.py` from this repo on the pinned pla
 
 That is why the fixture check exists. The re-solve was left in `work/` and was **not** written over `tracks/landscape.json`.
 
+The unmodified `track_phone.py` (sha256 `c768198f7f01b6f7d570e598c40c59946dfa7bdcff628a15681b25d0c547fcec`, byte-identical across the source packages) gives the same result, and the output is deterministic. With OpenCV 4.13, 4.14 or 5.0 it matches the shipped track to 0.000px on every frame **outside 188-257**. Inside that pickup gap no tested build (OpenCV 4.8 through 5.0, NumPy 1.26 through 2.5) regenerates the shipped segment; OpenCV 4.12 and older also decode the HEVC plate differently and drift elsewhere. The shipped 188-257 segment therefore exists only in `tracks/landscape.json`, which stays the oracle.
+
+`qa/pickup-sheet-188-257.jpg` is the visual evidence: cyan is the shipped track and stays on the glass through the pickup; red is a smoother alternate (worst jump 6.5px) that leaves the glass around frames 212-252 while the hand is over the phone. A motion-only gate would have accepted red. Only the fixture comparison catches it.
+
 ## Checks
 
 `compare_track.py` always runs both checks. A smooth track can still be wrong.
