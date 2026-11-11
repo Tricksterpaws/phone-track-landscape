@@ -252,5 +252,16 @@
         ]
       ]
     }
-  ]
+  ],
+  "motion": {
+    "max_jump": 22.48,
+    "worst_frames": [
+      206,
+      205,
+      187,
+      188,
+      230
+    ],
+    "note": "Worst corner acceleration of the track this baseline was taken from."
+  }
 }

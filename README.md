@@ -93,9 +93,12 @@ Fixture frames: 0, 72, 150, 200, 240, 258, 336, 432, 500, 548, 575.
 
 ### Motion check (informational)
 
-Flags frame-to-frame corner jumps (default flag threshold 5px). This check does **not** affect the exit code.
+Reports two quantities. Neither changes the exit code.
 
-The shipped `tracks/landscape.json` jumps **22.819px** from frame 205 to 206 (8.54–8.58s), inside the pickup gap at about 7.8–8.6s (frames ~188–206), when the hand covers the phone on the bed. Do not treat a lower max jump as proof the track is right. A red alternate track on this plate is smoother (worst jump 6.5px) and still leaves the glass around frames 212–252.
+1. **Frame-to-frame corner jumps** (px). Flags jumps at or above 5px. The shipped `tracks/landscape.json` jumps **22.819px** from frame 205 to 206 (8.54–8.58s), inside the pickup gap at about 7.8–8.6s (frames ~188–206), when the hand covers the phone on the bed.
+2. **Corner acceleration** (px/frame²), the change in per-frame movement. A jump shows up as a spike. `fixtures/landscape/expected.json` stores the shipped baseline `max_jump` **22.48** at frames 206, 205, 187, 188, 230. That 22.48 is a different metric from the 22.819px jump: it is the acceleration at frame 206, `round(22.476…, 2)`, i.e. how much the 205→206 step differs from 206→207. A spike more than 1.0 above this baseline is flagged, not failed.
+
+Do not treat a lower max jump or a lower spike as proof the track is right. A red alternate track on this plate is smoother (worst jump 6.5px) and still leaves the glass around frames 212–252. See `qa/pickup-sheet-188-257.jpg` (cyan = shipped, on the glass; red = the smoother alternate).
 
 Do not "fix" the shipped track just to lower the pickup jump unless a fixture-passing re-solve is the explicit goal. `tracks/landscape.json` is the regression oracle.
 
